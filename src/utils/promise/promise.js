@@ -117,6 +117,11 @@ export default class MyPromise {
                 break;
         }
     }
+
+    // 订阅reject
+    catch(onRejected) {
+        return this.then(void 666, onRejected)
+    }
 }
 
 export const testPromise = () => {
@@ -130,5 +135,7 @@ export const testPromise = () => {
     p.then(data => data + '8989')
     .then(data => data.toUpperCase())
     .then(console.log) // 订阅，
-    .then(() => {}, err => console.log(err))
+    // .catch(console.log)
+    .catch(err => console.log(err))
+    // .then(() => {}, err => console.log(err))
 }
