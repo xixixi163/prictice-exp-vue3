@@ -120,8 +120,9 @@ export default class MyPromise {
 }
 
 export const testPromise = () => {
-    const p = new MyPromise((resolve) => {
+    const p = new MyPromise((resolve, reject) => {
         setTimeout(() => {
+            reject(new Error('error---'))
             resolve('set time out')  // 执行闭包，还要保证只执行一次
             resolve('other--')
         })
