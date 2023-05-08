@@ -6,14 +6,14 @@
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
-import { compiler } from "./pages/babel-parse/parse.js"
+import { compiler } from "./pages/babel-parse/parse.js";
 export default {
   name: "App",
   components: {
     HelloWorld,
   },
   created() {
-    const output = compiler('const add = (a, b) => a + b');
+    const output = compiler("const add = (a, b) => a + b");
     console.log(output);
   },
   mounted() {
@@ -27,7 +27,7 @@ export default {
     //     console.log('custom event---')
     //   })
     // }
-  }
+  },
 };
 </script>
 
