@@ -149,6 +149,7 @@ export default class MyPromise {
   }
 
   // all Promise.all  返回interior 结果。全为 fulfilled 或 有一个reject 返回结果
+  //   将多个promise 包装成一个
   static all(promises) {
     return new MyPromise((resolve, reject) => {
       try {
@@ -169,6 +170,21 @@ export default class MyPromise {
         reject(error);
       }
     });
+  }
+
+  // 将多个promise 包装成一个
+  // 返回状态率先改变的那个promise
+  static race(promises) {
+    return new MyPromise((resolve, reject) => {
+        try {
+            // 虽然迭代，但是resolve 只会执行一次，所以不要紧
+            for (const promise of promises) {
+                MyPromise.resolve(promise).then(resolve) // v => resolve(v)
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
   }
 }
 // 下面是一个用Promise对象实现的Ajax操作的例子
@@ -222,4 +238,14 @@ export const testPromise = () => {
     .catch((reason) => {
       console.log("all catch:", reason);
     });
+
+    MyPromise.race([
+        new MyPromise((resolve) => {
+            setTimeout(() => resolve('先返回'), 1000)
+        }),
+        new MyPromise(reject => {
+            setTimeout(() => reject(new Error('后返回')), 2000)
+        })
+    ]).then(console.log)
+    .catch(console.log)
 };
