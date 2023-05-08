@@ -122,6 +122,73 @@ export default class MyPromise {
     catch(onRejected) {
         return this.then(void 666, onRejected)
     }
+
+    // resolve 发布 Promise.resolve 等价于new Promise(resolve => resolve('foo'))； MyPromise.resolve
+    // 将传入的对象转为promise对象
+    static resolve(p) {
+        if (p instanceof MyPromise) {
+            return p.then() // 返回promise  也是走到resolve 脱去函数外衣
+        }
+        return new MyPromise((resolve, reject) => {
+            resolve(p) // 发布
+        })
+    }
+    // reject 发布 也就是构造函数内部的rejected
+    static reject(p) {
+        if (p instanceof MyPromise) {
+            return p.catch()
+        }
+        return new MyPromise((resolve, reject) => {
+            reject(p)
+        })
+    }
+
+    // all Promise.all  返回interior 结果。全为 fulfilled 或 有一个reject 返回结果
+    static all(promises) {
+        return new MyPromise((resolve, reject) => {
+            try {
+                let count = 0
+                let len = promises.length
+                // 结果列表
+                let value = []
+                for (const promise of promises) {
+                    MyPromise.resolve(promise).then(v => {
+                        count++;
+                        value.push(v)
+                        if(count === len) {
+                            resolve(value) // 发布，返回结果
+                        }
+                    })
+                }
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+}
+// 下面是一个用Promise对象实现的Ajax操作的例子
+const getJSON = (url) => {
+    const promise = new MyPromise((resolve, reject) => {
+        let client = new XMLHttpRequest();
+        client.open('GET', url);
+        client.onreadystatechange = handler;
+        client.responseType = "json";
+        client.setRequestHeader("Accept", "application/json");
+        client.send();
+
+        function handler() {
+            if(this.readyState !== 4) {
+                return
+            }
+            if (this.status === 200) {
+                resolve(this.response)
+            } else {
+                reject(new Error(this.statusText))
+            }
+        }
+    })
+
+    return promise
 }
 
 export const testPromise = () => {
@@ -138,4 +205,14 @@ export const testPromise = () => {
     // .catch(console.log)
     .catch(err => console.log(err))
     // .then(() => {}, err => console.log(err))
+
+    const promises = [2,3,5,7,11,13].map((id) => {
+        return getJSON("/post/" + id + ".json")
+    })
+
+    MyPromise.all(promises).then((posts) => {
+        console.log("all: ", posts);
+    }).catch(reason => {
+        console.log("all catch:", reason);
+    })
 }
