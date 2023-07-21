@@ -1,16 +1,12 @@
 <template>
-  <button id="menu">Menu (click me)</button>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <router-view></router-view>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-import { compiler } from "./pages/babel-parse/parse.js";
+import { compiler } from "./views/babel-parse/parse.js";
 export default {
   name: "App",
   components: {
-    HelloWorld,
   },
   created() {
     const output = compiler("const add = (a, b) => a + b");
