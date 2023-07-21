@@ -1,8 +1,17 @@
 <template>
-    <div>virtual</div>
+    <div>virtual
+        <virtual-accordant></virtual-accordant>
+    </div>
 </template>
 <script>
+import VirtualAccordant from './components/virtual-accordant/index.vue'
 export default {
-    name: 'VirtualScroll'
+    components: {
+        VirtualAccordant
+    },
 }
 </script>
+<style scoped>
+
+</style>
+

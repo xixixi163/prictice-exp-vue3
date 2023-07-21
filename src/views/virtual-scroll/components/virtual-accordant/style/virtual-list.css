@@ -1,0 +1,13 @@
+.virtual-list-container {
+    .virtual-list-body-wrapper {
+      overflow: auto;
+      .virtual-body-y-space {
+        float: left;
+        width: 0px;
+      }
+      .list-item {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
