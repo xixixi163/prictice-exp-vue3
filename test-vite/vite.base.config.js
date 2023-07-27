@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
     optimizeDeps: {
-        exclude: []
-    }
+        exclude: [],
+    },
+    envPrefix: 'ENV_'
 })
