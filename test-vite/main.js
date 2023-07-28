@@ -4,6 +4,10 @@ import es from 'lodash-es';
 
 import './request.js';
 
-import 'index.css';
+import './index.css';
+
+import './components/componentA.js'
+import './components/componentB.js'
 
 console.log(count, _, es);
+
